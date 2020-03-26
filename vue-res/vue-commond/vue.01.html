@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../lib/vue.js"></script>
+		<style>
+			/* 用这个属性可以解决由于网速问题导致的页面延迟加载的问题 */
+			[v-cloak] {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 这两种方法都可以用来绑定数据 -->
+			<!-- 区别：{{xxx}}这一种方法可以拼接字符串，但是v-text是没有这种效果的 -->
+			<p v-cloak>{{ msg }}</p>
+			<p v-cloak>+++++++++++++++++++++++{{ msg }}-----------------------------</p>
+			<p v-text = "msg"></p>
+			<p v-text = "msg">++++++++++++++++++++++++++++---------------------------------------</p>
+		</div>
+
+		<script>
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					msg: '123'
+				}
+			})
+		</script>
+	</body>
+</html>

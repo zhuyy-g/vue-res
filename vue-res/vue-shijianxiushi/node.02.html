@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+        <script src="../lib/vue.js"></script>
+        <style>
+            
+        </style>
+	</head>
+	<body>
+		<div id="app">
+            <!-- prevent可以阻止默认行为 -->
+           <a href="http://www.baidu.com" @click.prevent = "baidu">百度一下</a>
+		</div>
+
+		<script>
+			var vm = new Vue({
+				el: '#app',
+				data: {
+                    
+                },
+                methods: {
+                   baidu(){
+                       console.log("百度");
+                   }
+                }
+			})
+		</script>
+	</body>
+</html>

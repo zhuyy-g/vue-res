@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../lib/vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+            <input type="button" value="跑起来" @click = "run">
+            <input type="button" value="停止" @click = "stop">
+
+            <h4>{{ msg }}</h4>
+		</div>
+
+		<script>
+			var vm = new Vue({
+				el: '#app',
+				data: {
+                    msg: '这是我的跑马灯',
+                    intervalId: null
+                },
+                methods: {
+                    run(){
+                        //加上这句话的原因是：在跑的过程中如果再点击就不会重新创建定时器了
+                        if(this.intervalId == null){
+                            this.intervalId = setInterval(()=>{
+                                var start = this.msg.substring(0,1);
+                                var end = this.msg.substring(1);
+                                this.msg = end + start;
+                            },100)
+                        }
+                        
+                    },
+                    stop(){
+                        //点击了停止按钮之后，this.intervalId依旧存在，再点跑起来就没用了，所以在最后要置位空值
+                        clearInterval(this.intervalId);
+                        this.intervalId = null;
+                    }
+                }
+			})
+		</script>
+	</body>
+</html>

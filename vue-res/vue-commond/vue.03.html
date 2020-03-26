@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../lib/vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+        <!-- 这是vue里面用来处理事件绑定的方法可以将v-on:写作@ -->
+           <!-- <input type="button" value="按钮" v-on:click="show" id="" name=""> -->
+           <input type="button" value="按钮" @click="show" id="" name="">
+		</div>
+
+		<script>
+			var vm = new Vue({
+				el: '#app',
+				data: {
+                    
+                },
+                // 注意：这个下面有一个易错点,methods 不要写成method
+                methods: {
+                    show: function(){
+                        alert("Hello Vue");
+                    }
+                }
+			})
+		</script>
+	</body>
+</html>
