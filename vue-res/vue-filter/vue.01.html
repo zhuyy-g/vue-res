@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="../lib/bootstrap.css">
+		<script src="../lib/vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+            <!-- 可以用这种方法串联过滤器 -->
+           <p>{{msg | msgFormat('母') | magFormat2}}</p>
+		</div>
+
+		<script>
+            // 这句话的作用是：使vue调试工具可以使用
+            Vue.config.devtools = true;
+            // 过滤器的使用方法：将字符串传入，函数内部修改，可以返回一个新的字符串(可以带参数进去)
+            Vue.filter('msgFormat', function (msg,arg){
+                return msg.replace(/目/g,arg)
+            })
+
+            Vue.filter('magFormat2', function (msg){
+                return msg + '---------------座右铭'
+            })
+
+            // Vue.config.devtools = true;
+			var vm = new Vue({
+				el: '#app',
+				data: {
+                    msg: "失败乃成功之目"
+				},
+                methods: {
+                    
+                }
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="../lib/bootstrap.css">
+		<script src="../lib/vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+            <!-- 在传递数字或者布尔类型的数据，一定要用v-bind传递，不然会被传递为字符串类型 -->
+            <!-- <menu-item :pstr = "pstr" pnum = "12"></menu-item> -->
+            <!-- 注意：这里有一个易错点，这里的参数不要出现大写字符 -->
+           <menu-item :pstr = "pstr" :pnum = "12" :parr = "pArr" :pobj = "pObj"></menu-item>
+		</div>
+
+		<script>
+           
+           Vue.component('menu-item',{
+                props:['pstr','pnum','parr','pobj'],
+                template:`
+                    <div>
+                        <p>{{ pstr }}</p>
+                        <p>{{ pnum + 12 }}</p>
+                        <ul>
+                            <li v-for = "(item,i) in parr" :key='i'>{{ item }}<li>
+                        </ul>
+                        <span>{{ pobj.name }}</span>
+                        <span>{{ pobj.special }}</span>
+                    </div>
+                `
+           })
+            // Vue.config.devtools = true;
+			var vm = new Vue({
+				el: '#app',
+				data: {
+                    pmsg: "父组件当中的内容",
+                    pstr: "hello",
+                    pArr: ["aa","bb","cc"],
+                    pObj: {name: "BTS",special: "handsome"}
+				}
+			})
+		</script>
+	</body>
+</html>

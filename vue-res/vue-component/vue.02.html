@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../lib/vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+            <!-- 驼峰命名法命名的组件不可以直接用，在根组件当中使用时必须要用横线间隔命名法 -->
+            <!-- <helloWorld></helloWorld> -->
+            <hello-world></hello-world>
+		</div>
+
+		<script>
+            Vue.component('helloWorld',{
+               data(){
+                   return {
+                       msg: "这是用驼峰命名法命名的组件"
+                   }
+               },
+               template: `<div>{{ msg }}</div>`
+            })
+
+			var vm = new Vue({
+				el: '#app',
+				data: {
+                    msg: '这是我的跑马灯'
+                }
+			})
+		</script>
+	</body>
+</html>

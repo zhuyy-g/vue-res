@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style type="text/css">
+    .container {
+    }
+    .container .cart {
+      width: 300px;
+      margin: auto;
+    }
+    .container .title {
+      background-color: lightblue;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      /*color: #fff;*/  
+    }
+    .container .total {
+      background-color: #FFCE46;
+      height: 50px;
+      line-height: 50px;
+      text-align: right;
+    }
+    .container .total button {
+      margin: 0 10px;
+      background-color: #DC4C40;
+      height: 35px;
+      width: 80px;
+      border: 0;
+    }
+    .container .total span {
+      color: red;
+      font-weight: bold;
+    }
+    .container .item {
+      height: 55px;
+      line-height: 55px;
+      position: relative;
+      border-top: 1px solid #ADD8E6;
+    }
+    .container .item img {
+      width: 45px;
+      height: 45px;
+      margin: 5px;
+    }
+    .container .item .name {
+      position: absolute;
+      width: 90px;
+      top: 0;left: 55px;
+      font-size: 16px;
+    }
+
+    .container .item .change {
+      width: 100px;
+      position: absolute;
+      top: 0;
+      right: 50px;
+    }
+    .container .item .change a {
+      font-size: 20px;
+      width: 30px;
+      text-decoration:none;
+      background-color: lightgray;
+      vertical-align: middle;
+    }
+    .container .item .change .num {
+      width: 40px;
+      height: 25px;
+    }
+    .container .item .del {
+      position: absolute;
+      top: 0;
+      right: 0px;
+      width: 40px;
+      text-align: center;
+      font-size: 40px;
+      cursor: pointer;
+      color: red;
+    }
+    .container .item .del:hover {
+      background-color: orange;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+        <my-cart></my-cart>
+    </div>
+  </div>
+  <script type="text/javascript" src="../lib/vue.js"></script>
+  <script type="text/javascript">
+    //下面演示的是用三个vue组件拼接为一个购物车的写法
+    //基本思路  1.写出静态页面（后面插入到template当中相对方便）
+    //购物车 车头组件（动态传入用户名）
+    var CartTitle = {
+        props: ['username'],
+        template:`
+            <div class="title">{{ username }}的商品</div>
+        `
+    };
+    // 购物车 商品组件（动态传入商品列表）
+    var CartList = {
+        props: ['list'],
+        //在这个模板中，对列表进行遍历（注意：写在字符模板当中的内容，与html当中的写法是完全一致的）
+        template:`
+            <div>
+                <div class="item" :key = "item.id" v-for = "item in list">
+                    // 注意：下面的冒号不可以删掉，删掉就变成直接用引号里面的内容了
+                    <img :src="item.img"/>
+                    <div class="name">{{ item.name }}</div>
+                    <div class="change">
+                    <a href="" @click.prevent = "sub(item.id)">－</a>
+                    // 这里的$event的含义是将input框当中的内容传出来的一种默认写法
+                    <input type="text" class="num" :value = "item.num" @blur = 'changeNum(item.id,$event)'/>
+                    <a href="" @click.prevent = "add(item.id)">＋</a>
+                    </div>
+                    <div class="del" @click = "del(item.id)">×</div>
+                </div>
+            </div>
+        `,
+        //不建议在子组件里面直接修改由父组件传递过来的数据,一般建议用this.$emit('fun',args)这样的方法传递到父组件当中来处理
+        //在父组件中，通过在子组件标签体内写上@fun = "func($event)"来进行处理
+        methods: {
+            del(id){
+                this.$emit('cart-del',id);
+            },
+            // 注意：下面的三个方法对应的是父组件当中同一个自定义方法（为了方法的兼容性强,可以传入一个对象）使用同一个方法的基础是，方法当中的处理逻辑相似
+            changeNum(id,event) {
+                this.$emit('change-num',{
+                    id: id,
+                    type: 'change',
+                    num: event.target.value
+                })
+            },
+            sub(id){
+                this.$emit('change-num',{
+                    id: id,
+                    type: 'sub'
+                })
+            },
+            add(id){
+                this.$emit('change-num',{
+                    id: id,
+                    type: 'add'
+                })
+            }
+        }
+    };
+    //购物车 车尾组件(动态传入商品列表)
+    var CartTotal = {
+        props: ['list'],
+        template:`
+            <div class="total">
+                <span>总价：{{ total }}</span>
+                <button>结算</button>
+            </div>
+        `,
+        //通过计算属性得到商品总价
+        computed: {
+            total(){
+                var t = 0;
+                //对列表进行遍历forEach()
+                this.list.forEach(item => {
+                    t += item.num * item.price;
+                });
+                return t;
+            }
+        }
+    }
+    //这是整个页面的核心组件，在这个组件中传递数据给下级，并且拼接几个子组件
+    Vue.component('my-cart',{
+        data(){
+            return {
+                username: 'zhuyy-g',
+                list: [
+                    {
+                        id: 1,
+                        name: "TCL彩电",
+                        price: 1000,
+                        num: 1,
+                        img: "img/a.jpg"
+                    },
+                    {
+                        id: 1,
+                        name: "机顶盒",
+                        price: 1000,
+                        num: 1,
+                        img: "img/b.jpg"
+                    },
+                    {
+                        id: 1,
+                        name: "海尔冰箱",
+                        price: 1000,
+                        num: 1,
+                        img: "img/c.jpg"
+                    },
+                    {
+                        id: 1,
+                        name: "小米手机",
+                        price: 1000,
+                        num: 1,
+                        img: "img/d.jpg"
+                    },
+                    {
+                        id: 1,
+                        name: "PPTV",
+                        price: 1000,
+                        num: 1,
+                        img: "img/e.jpg"
+                    }
+                ]
+            }
+        },
+        template:`
+            <div class="cart">
+                <cart-title :username = "username"></cart-title>  
+                // 下面展示了父组件自定义事件的写法
+                <cart-list :list = "list" @cart-del = "del($event)" @change-num = "changeNum($event)"></cart-list>
+                <cart-total :list = "list"></cart-total>
+            </div>
+        `,
+        //此处展示了私有化组件的写法
+        components: {
+            'cart-title': CartTitle,
+            'cart-list': CartList,
+            'cart-total': CartTotal
+        },
+        methods: {
+            del(id){
+                var index = this.list.findIndex(item => {
+                    return item.id == id;
+                })
+                this.list.splice(index,1);
+            },
+            changeNum(value){
+                //根据类型的不同 遍历数组，根据id匹配到对应商品，再修改这个商品的数量
+                if(value.type == 'change'){
+                    this.list.some(item => {
+                        if(item.id == value.id){
+                            item.num = value.num;
+                            return true;
+                        }
+                    })
+                }else if(value.type == 'add'){
+                    this.list.some(item => {
+                        if(item.id == value.id){
+                            item.num += 1;
+                            return true;
+                        }
+                    })
+                }else if(value.type == 'sub'){
+                    this.list.some(item => {
+                        if(item.id == value.id){
+                            item.num -= 1;
+                            return true;
+                        }
+                    })
+                }
+                
+            }
+        }
+    })
+    var vm = new Vue({
+      el: '#app',
+      data: {
+
+      }
+    });
+
+  </script>
+</body>
+</html>

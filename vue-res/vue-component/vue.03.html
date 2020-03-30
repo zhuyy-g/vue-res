@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../lib/vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+            <hello-world></hello-world>
+            <hello-tom></hello-tom>
+            <hello-jerry></hello-jerry>
+            <test-com></test-com>
+		</div>
+
+		<script>
+            //下面演示私有组件不能用在其他组件中
+            Vue.component('test-com',{
+                template: `<div>Test<hello-world></hello-world></div>`
+            })
+            //下面演示私有组件的用法，这与格式化定义组件不同的地方是写法中将显式的定义改成将内容交给了一个对象
+            var HelloWorld = {
+                data(){
+                    return {
+                        msg : "HelloWorld"
+                    }
+                },
+                template: '<div>{{ msg }}</div>'
+            }
+            var HelloTom= {
+                data(){
+                    return {
+                        msg : "HelloTom"
+                    }
+                },
+                template: '<div>{{ msg }}</div>'
+            }
+            var HelloJerry = {
+                data(){
+                    return {
+                        msg : "HelloJerry"
+                    }
+                },
+                template: '<div>{{ msg }}</div>'
+            }
+
+
+			var vm = new Vue({
+				el: '#app',
+				data: {
+                    msg: '这是我的跑马灯'
+                },
+                //这里就是私有化组件初始化的地方  格式：组件名:对象名
+                components: {
+                    'hello-world': HelloWorld,
+                    'hello-tom': HelloTom,
+                    'hello-jerry': HelloJerry
+                }
+			})
+		</script>
+	</body>
+</html>

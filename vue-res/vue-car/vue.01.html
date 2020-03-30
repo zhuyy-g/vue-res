@@ -10,20 +10,29 @@
 		<div id="app">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">添加品牌</h3>
+                    <h3 class="panel-title" v-fontweight="500" v-fontsize="30">添加品牌</h3>
                 </div>
                 <div class="panel-body form-inline">
                     <label for="">
                         Id:&nbsp;&nbsp;
-                        <input type="text" name="" id="" class="form-control" v-model="id">
+                        <input type="text" class="form-control" v-model="id">
                     </label>
                     &nbsp;&nbsp;&nbsp;
                     <label for="">
                         Name:&nbsp;&nbsp;
-                        <input type="text" name="" id="" class="form-control" v-model="name">
+                        <!-- 下面的.enter修饰符可以绑定键盘事件(有一部分特殊的按键是vue官方定义好了的，如果要用自定义的话，要用键盘码来操作) -->
+                        <!-- <input type="text" name="" id="" class="form-control" v-model="name" @keyup.enter="add"> -->
+                        <!-- <input type="text" name="" id="" class="form-control" v-model="name" @keyup.113="add"> -->
+                        <input type="text" class="form-control" v-model="name" @keyup.f2="add">
                     </label>
                     &nbsp;&nbsp;&nbsp;
                     <input type="button" value="添加" class="btn btn-primary" @click="add">
+                    &nbsp;&nbsp;&nbsp;
+                    <!-- 自定义指令可以带入参数，有一个注意点要加上单引号，否则的话，就要到data里面去找skyblue了 -->
+                    <input type="text" class="form-control" v-model="searchStr" v-focus v-color="'red'">
+                    &nbsp;&nbsp;&nbsp;
+                    <!-- vue支持自定义指令的使用，下面的v-focus就是典型 -->
+                    <input type="button" value="搜索" class="btn btn-primary" @click="search(searchStr)">
                 </div>
             </div>
             <br>
@@ -37,12 +46,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in list" :key="item.id">
+                    <tr v-for="item in search(searchStr)" :key="item.id">
                         <td>{{item.id}}</td>
                         <td v-text="item.name"></td>
-                        <td>{{item.ctime}}</td>
+                        <td>{{item.ctime | timeFilter("时分秒")}}</td>
                         <td>
-                            <a href="" @click.prevent = "delete(item.id)">删除</a>
+                            <a href="" @click.prevent = "del(item.id)">删除</a>
                         </td>
                     </tr>
                 </tbody>
@@ -50,11 +59,58 @@
 		</div>
 
 		<script>
+            // 自定义全局按键修饰符(用了这个以后，后面就可以直接写f2了)
+            Vue.config.keyCodes.f2 = 113;
+            Vue.config.devtools = true;
+            // 下面是es6的语法格式supplement有的话就取传过来的值，没有的话：默认为空(放置空指针异常)
+            Vue.filter('timeFilter',(msg,supplement="") => {
+                var dt = new Date(msg);
+
+                var y = dt.getFullYear();
+                var m = dt.getMonth() + 1;
+                var d = dt.getDate();
+
+                if(supplement == ""){
+                    return`${y}-${m}-${d}`
+                }else{
+                    var hh = dt.getHours();
+                    var mm = dt.getMinutes();
+                    var ss = dt.getSeconds();
+                    return`${y}-${m}-${d}  ${hh}-${mm}-${ss}`
+                }
+                
+            })
+
+            //下面演示自定义指令的使用方法
+            Vue.directive('focus',{
+                //这里面的三个是vue里面的事件周期函数
+                //元素刚刚拥有自定义指令时使用，只使用一次
+                bind: (el) => {
+
+                },
+                //元素刚被渲染到dom调用，只调用一次(这个示例应该用inserted,即元素刚渲染到页面上就获得焦点)
+                inserted: (el) => {
+                    el.focus();
+                },
+                //元素发生改变时调用，调用多次
+                updated: (el) => {
+
+                }
+            })
+
+            Vue.directive('color',{
+                //给元素设置颜色的话:用bind这个钩子方法就可以了
+                bind: (el,binding) => {
+                    el.style.color = "skyblue";
+                }
+            })
+
 			var vm = new Vue({
 				el: '#app',
 				data: {
                     id:null,
                     name:"",
+                    searchStr:"",
 					list:[
                         {id:1,name:"宝马",ctime:new Date()},
                         {id:2,name:"奔驰",ctime:new Date()},
@@ -65,24 +121,58 @@
                     add(){
                         var addObj = {id:this.id,name:this.name,ctime:new Date()};
                         this.list.push(addObj);
+                        this.id = "";
+                        this.name = "";
                     },
-                    delete(id){
+                    del(id){
                         //some是遍历数组的方法
-                        this.list.some((item,i)=>{
-                            if(item.id == id){
-                                this.list.splice(i,1);
-                                return true;
-                            }
-                        })
-                        //数组里面根据条件找到下标的方法
-                        // var index = this.list.findIndex(item => {
+                        // this.list.some((item,i)=>{
                         //     if(item.id == id){
+                        //         this.list.splice(i,1);
                         //         return true;
                         //     }
                         // })
-                        // console.list(index);
+                        //数组里面根据条件找到下标的方法
+                        var index = this.list.findIndex(item => {
+                            if(item.id == id){
+                                return true;
+                            }
+                        })
                         //数组删除指定下标对应的元素的方法
-                        // this.list.splice(index,1);
+                        this.list.splice(index,1);
+                    },
+                    search(searchStr){
+                        // var newList = [];
+                        // this.list.forEach(item => {
+                        //     if(item.name.indexOf(searchStr) != -1){
+                        //         newList.push(item);
+                        //     }
+                        // })
+                        // return newList;
+
+                        var newList = this.list.filter(item => {
+                            if(item.name.includes(searchStr)){
+                                return item;
+                            }
+                        })
+                        return newList;
+                    }
+                },
+                directives: {
+                    'color':{
+                        bind: (el,binding) => {
+                            el.style.color = binding.value;
+                        }
+                    },
+                    'fontweight':{
+                        bind: (el,binding) => {
+                            el.style.fontWeight = binding.value;
+                        }
+                    },
+                    'fontsize':{
+                        bind: (el,binding) => {
+                            el.style.fontSize = parseInt(binding.value) + "px";
+                        }
                     }
                 }
 			})

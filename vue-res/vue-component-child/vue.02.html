@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="../lib/bootstrap.css">
+		<script src="../lib/vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+            <div>{{pmsg}}</div>
+            <!-- 可以用v-bind动态绑定传到子组件的数据 -->
+            <menu-item :title="pcmsg" content="父组件当中静态写死传递过来的内容">
+
+            </menu-item>
+		</div>
+
+		<script>
+            // 本例演示的是由父组件向子组件传值的方法，子组件通过prop属性来接受值
+            Vue.component('menu-item',{
+                props: ['title','content'],
+                data(){
+                    return {
+                        msg: '子组件本身的数据'
+                    }
+                },
+                template: '<div>{{msg + "-------------------" + title + "--------------------" + content}}</div>'
+            })
+			var vm = new Vue({
+				el: '#app',
+				data: {
+                   pmsg:'父组件中的内容',
+                   pcmsg:'父组件当中动态绑定传过来的内容'
+				}
+			})
+		</script>
+	</body>
+</html>

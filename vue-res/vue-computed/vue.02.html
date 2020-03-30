@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="../lib/bootstrap.css">
+		<script src="../lib/vue.js"></script>
+	</head>
+	<body>
+		<div id="app1">
+           <p>{{ totalPrice }}</p>
+        </div>
+
+		<script>
+            Vue.config.devtools = true;
+			var vm = new Vue({
+				el: '#app1',
+                // 计算属性不可以在data当中初始化
+				data: {
+                    books: [
+                        {id:1,name:"肖申克的救赎",price:50},
+                        {id:2,name:"红楼梦",price:100},
+                        {id:3,name:"霸王别姬",price:30},
+                        {id:4,name:"傲慢与偏见",price:60}
+                    ]
+				},
+                // 以下是对计算属性返回结果的方法
+                computed: {
+                    // 使用计算属性的好处是:只要与计算结果相关的值不发生变化，那么就是使用的缓存里面的值（减少使用了methods的计算量）
+                    totalPrice() {
+                        let totalPrice = 0;
+                        for (let i in this.books) {
+                            totalPrice += this.books[i].price;
+                        }
+                        // for (let j of this.books) {
+                        //     totalPrice += j.price;
+                        // }
+                        return totalPrice;
+                    }
+                }
+			})
+		</script>
+	</body>
+</html>

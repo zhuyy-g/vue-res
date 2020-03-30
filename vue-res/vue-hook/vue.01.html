@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../lib/vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+            <div>{{ msg }}</div>
+            <button @click = "update">点击更新</button>
+            <button @click = "destroy">摧毁组件</button>
+		</div>
+
+		<script>
+
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					msg:"Hello World"
+				},
+                methods: {
+                    update() {
+                       this.msg = "我去更新啦"
+                    },
+                    destroy() {
+                        // 这个方法用于摧毁组件
+                        this.$destroy();
+                    }
+                },
+                // 下面列举vue的所有钩子函数，经常会被用到的是mounted(后台的数据填充到页面)
+                beforeCreate(){
+                    console.log("beforeCreate");
+                },
+                created(){
+                    console.log("created");
+                },
+                beforeMounted(){
+                    console.log("beforeMounted");
+                },
+                mounted(){
+                    console.log("mounted");
+                },
+                beforeUpdate(){
+                    console.log("beforeUpdate");
+                },
+                updated(){
+                    console.log("updated");
+                },
+                beforeDestroy(){
+                    console.log("beforeDestroy");
+                },
+                destroyed(){
+                    console.log("destroyed");
+                }
+			})
+		</script>
+	</body>
+</html>
