@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//用fetch方法解决调用后台接口(默认get方法)
+			fetch('http://localhost:3000/fdata').then((data) => {
+				return data.text()
+			}).then((data) => {
+				console.log(data);
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+        <script src="../lib/axios.js"></script>
+		<script type="text/javascript">
+			//post方式传递参数，调用接口
+			axios.post("http://localhost:3000/axios",{
+                uname: 'lisi',
+                pwd: 123
+            }).then((res) => {
+                console.log(res.data);
+            })
+		</script>
+	</body>
+</html>

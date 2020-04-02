@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//post + form表单方式接口调用
+			fetch('http://localhost:3000/books',{
+				method: 'post',
+				body: 'uname=lisi&pwd=123',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).then((data) => {
+				return data.text()
+			}).then((data) => {
+				console.log(data);
+			})
+		</script>
+	</body>
+</html>

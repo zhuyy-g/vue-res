@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//url地址后面加上查询条件的处理
+			fetch('http://localhost:3000/books?id=123',{
+				method: 'get'
+			}).then((data) => {
+				return data.text()
+			}).then((data) => {
+				console.log(data);
+			})
+		</script>
+	</body>
+</html>

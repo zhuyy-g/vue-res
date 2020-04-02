@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+        <script src="../lib/axios.js"></script>
+		<script type="text/javascript">
+			//post传递另一种格式的参数
+            var params = new URLSearchParams();
+            params.append('uname','zhangsan');
+            params.append('pwd',111);
+			axios.post("http://localhost:3000/axios",params).then((res) => {
+                console.log(res.data);
+            })
+		</script>
+	</body>
+</html>

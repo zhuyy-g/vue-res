@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//将从接口传递回来的数据转为json格式
+			fetch('http://localhost:3000/json').then((data) => {
+				return data.text()
+			}).then((data) => {
+                var obj = JSON.parse(data);
+                console.log(obj.uname,obj.age,obj.gender)
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+        <script src="../lib/axios.js"></script>
+		<script type="text/javascript">
+			//用axios（类似于ajax fetch）调用接口获取数据
+			axios.get("http://localhost:3000/adata").then((res) => {
+                console.log(res.data);
+            })
+		</script>
+	</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+        <script src="../lib/axios.js"></script>
+		<script type="text/javascript">
+			//put + restful调用接口传递数据
+			axios.put("http://localhost:3000/axios/123",{
+                uname: 'lisi',
+                pwd: 123
+            }).then((res) => {
+                console.log(res.data);
+            })
+		</script>
+	</body>
+</html>

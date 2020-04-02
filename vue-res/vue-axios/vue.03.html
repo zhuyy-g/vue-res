@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+        <script src="../lib/axios.js"></script>
+		<script type="text/javascript">
+			//restful格式的参数获取数据
+			axios.get("http://localhost:3000/adata/123").then((res) => {
+                console.log(res.data);
+            })
+		</script>
+	</body>
+</html>

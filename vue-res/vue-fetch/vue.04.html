@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//delete + restful调用接口的处理
+			fetch('http://localhost:3000/books/123',{
+				method: 'DELETE'
+			}).then((data) => {
+				return data.text()
+			}).then((data) => {
+				console.log(data);
+			})
+		</script>
+	</body>
+</html>

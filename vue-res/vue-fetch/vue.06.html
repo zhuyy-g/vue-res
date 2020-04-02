@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			// put + restful + json 方式接口调用
+			fetch('http://localhost:3000/books/789',{
+				method: 'put',
+				body: JSON.stringify({
+					uname: "zhangsan",
+					pwd: 456
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}).then((data) => {
+				return data.text()
+			}).then((data) => {
+				console.log(data);
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+        <script src="../lib/axios.js"></script>
+		<script type="text/javascript">
+			//同时用fetch方式以及param对象的方式传递参数
+			axios.get("http://localhost:3000/axios/123",{
+                params: {
+                    id: 789
+                }
+            }).then((res) => {
+                console.log(res.data);
+            })
+		</script>
+	</body>
+</html>
