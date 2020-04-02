@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script src="../lib/axios.js"></script>
+		<script type="text/javascript">
+			async function queryData() {
+				var ret = await new Promise((req,res) => {
+					setTimeout(() => {
+						req('nihao')
+					},1000)
+				});
+				return ret;
+			}
+			queryData().then((data) => {
+				console.log(data);
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script src="../lib/axios.js"></script>
+		<script type="text/javascript">
+			axios.defaults.baseURL = 'http://localhost:3000/';
+			
+			async function queryData() {
+				var info = await axios.get('async1');
+				var ret = await axios.get('async2?info=' + info.data);
+				return ret.data;
+			}
+			
+			queryData().then((data) => {
+				console.log(data);
+			})
+		</script>
+	</body>
+</html>

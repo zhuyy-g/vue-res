@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			function queryData(url) {
+				return new Promise((res,rej) => {
+					var xhr = new XMLHttpRequest();
+					xhr.onreadystatechange = function(){
+						if(xhr.readyState != 4) return;
+						if(xhr.readyState == 4 && xhr.status == 200){
+							res(xhr.responseText);
+						}else{
+							rej('服务器错误')
+						}
+					};
+					xhr.open('get',url);
+					xhr.send();
+				})
+			}
+			var p1 = queryData('http://localhost:3000/a1');
+			var p2 = queryData('http://localhost:3000/a2');
+			var p3 = queryData('http://localhost:3000/a3');
+			//all(方法的含义是：等其中包含的所有异步函数都处理完成之后，才会返回结果，结果会被封装为一个数组返回)
+			Promise.all([p1,p2,p3]).then(function(result){
+				console.log(result);
+			})
+		</script>
+	</body>
+</html>

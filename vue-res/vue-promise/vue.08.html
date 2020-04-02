@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			function queryData(url) {
+				return new Promise((res,rej) => {
+					var xhr = new XMLHttpRequest();
+					xhr.onreadystatechange = function(){
+						if(xhr.readyState != 4) return;
+						if(xhr.readyState == 4 && xhr.status == 200){
+							res(xhr.responseText);
+						}else{
+							rej('服务器错误')
+						}
+					};
+					xhr.open('get',url);
+					xhr.send();
+				})
+			}
+			var p1 = queryData('http://localhost:3000/a1');
+			var p2 = queryData('http://localhost:3000/a2');
+			var p3 = queryData('http://localhost:3000/a3');
+			//race():方法的含义是几个异步函数同时进行，只返回第一个执行完成的异步函数的结果，其他异步函数仍然执行，只是不返回结果）
+			Promise.race([p1,p2,p3]).then(function(result){
+				console.log(result);
+			})
+		</script>
+	</body>
+</html>

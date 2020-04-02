@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script src="../lib/axios.js"></script>
+		<script type="text/javascript">
+			axios.interceptors.response.use((res) => {
+				var data = res.data;
+				return data;
+			},(err) => {
+				console.log(err);
+			})
+			// axios.get('http://localhost:3000/json',(data) => {
+			// 	console.log(data);
+			// })
+			axios.get('http://localhost:3000/json').then((res) => {
+				console.log(res.uname);
+			})
+		</script>
+	</body>
+</html>

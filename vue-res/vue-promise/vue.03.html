@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+        <script src="../lib/vue.js"></script>
+        <style>
+            
+        </style>
+	</head>
+	<body>
+		<div id="app">
+            <!-- prevent可以阻止默认行为 -->
+           <a href="http://www.baidu.com" @click.prevent = "baidu">百度一下</a>
+		</div>
+        <!-- 要使得下面的事件可以触发，必须在这个html页面打开,直接在地址栏请求http://localhost:8000/data不是发送的ajax请求 -->
+		<script>
+			function queryData(url){
+                var p = new Promise((res,rej) => {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function(){
+                        if(xhr.readyState != 4) return;
+                        if(xhr.readyState == 4 && xhr.status == 200){
+                            res(xhr.responseText)
+                        }else{
+                            rej('服务器出错误了')
+                        }
+                    };
+                    xhr.open('get',url);
+                    xhr.send();
+                });
+                return p;
+            }
+            queryData('http://localhost:8000/data')
+            .then((data) => {
+                console.log(data);
+                return queryData('http://localhost:8000/data1')
+            })
+            .then((data) => {
+                console.log(data);
+                return new Promise((res,rej) => {
+                    setTimeout(() => {
+                        res(123)
+                    },1000)
+                })
+            })
+            .then((data) => {
+                console.log(data);
+            })
+		</script>
+	</body>
+</html>

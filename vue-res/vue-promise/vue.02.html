@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+        <script src="../lib/vue.js"></script>
+        <style>
+            
+        </style>
+	</head>
+	<body>
+		<div id="app">
+            <!-- prevent可以阻止默认行为 -->
+           <a href="http://www.baidu.com" @click.prevent = "baidu">百度一下</a>
+		</div>
+        <!-- 要使得下面的事件可以触发，必须在这个html页面打开,直接在地址栏请求http://localhost:8000/data不是发送的ajax请求 -->
+		<script>
+            //用Promise来处理异步的思想是
+            //新建一个Promise类
+            //将异步方法写在该类中，正确结果作为参数传递给res，异常结果作为参数传给rej
+			function queryData(url){
+                var p = new Promise((res,rej) => {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function(){
+                        if(xhr.readyState != 4) return;
+                        if(xhr.readyState == 4 && xhr.status == 200){
+                            res(xhr.responseText)
+                        }else{
+                            rej('服务器出错误了')
+                        }
+                    };
+                    xhr.open('get',url);
+                    xhr.send();
+                });
+                return p;
+            }
+            //使用then方法来实现异步方法的嵌套调用（防止代码出现回调地狱的出现）
+            // Promise1.then(function(succ){
+            //     console.log(succ);
+            //     return Promise2
+            // },function(err){
+            //     console.log(err);
+            // })
+            // .then(function(succ2){
+            //     console.log(succ2);
+            //     return Promise3
+            // },function(err2){
+            //     console.log(err2);
+            // })
+            queryData('http://localhost:8000/data')
+            .then((data) => {
+                console.log(data);
+                return queryData('http://localhost:8000/data1')
+            })
+            .then((data) => {
+                console.log(data);
+                return queryData('http://localhost:8000/data2')
+            })
+            .then((data) => {
+                console.log(data);
+            })
+		</script>
+	</body>
+</html>
